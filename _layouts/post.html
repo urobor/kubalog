@@ -1,0 +1,14 @@
+---
+layout: default
+---
+<article class="reading-view">
+  <a class="back" href="{{ '/' | relative_url }}">← Back to the notebook</a>
+  <div class="entry-meta"><span class="tag">{{ page.topic | escape }}</span><span>{{ page.date | date: '%d %b %Y' }}</span><span>·</span><span>{{ content | number_of_words | divided_by: 200 | plus: 1 }} min read</span></div>
+  <h1>{{ page.title | escape }}</h1>
+  {% if page.summary %}<p class="reading-summary">{{ page.summary | escape }}</p>{% endif %}
+  <div class="byline"><span class="avatar small">K</span><span>{{ site.author | escape }}<span class="muted"> · Fieldnotes</span></span></div>
+  <div class="entry-body">{{ content }}</div>
+  <div class="reading-end">{% include feather.svg %}<span>A thought, kept.</span></div>
+  <nav class="post-neighbors" aria-label="Other entries">{% if page.previous %}<a href="{{ page.previous.url | relative_url }}">← {{ page.previous.title | escape }}</a>{% endif %}{% if page.next %}<a href="{{ page.next.url | relative_url }}">{{ page.next.title | escape }} →</a>{% endif %}</nav>
+  <a class="back" href="{{ '/' | relative_url }}">← All entries</a>
+</article>

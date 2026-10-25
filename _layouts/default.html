@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title | escape }} — {% endif %}{{ site.title | escape }}</title>
+  <meta name="description" content="{{ page.summary | default: site.description | escape }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+  <script src="{{ '/assets/journal.js' | relative_url }}" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="shell">
+  <header class="mobile-header">
+    <button id="menu-toggle" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">☰</button>
+    <a href="{{ '/' | relative_url }}">fieldnotes<span class="brand-dot">.</span></a><span class="avatar small">K</span>
+  </header>
+  <aside id="sidebar" class="sidebar">
+    <a href="{{ '/' | relative_url }}" class="brand"><span class="brand-symbol">{% include feather.svg %}</span>fieldnotes<span class="brand-dot">.</span></a>
+    <div class="profile"><span class="avatar">K</span><div><strong>{{ site.author | escape }}’s personal log</strong><span>A curious work in progress</span></div></div>
+    <div class="nav-label">THE NOTEBOOK</div>
+    <nav aria-label="Notebook"><a class="nav-item {% if page.url == '/' %}active{% endif %}" href="{{ '/' | relative_url }}"><span>▤</span><span>All entries</span><small>{{ site.posts | size }}</small></a></nav>
+    {% assign topics = site.posts | map: 'topic' | uniq | sort %}
+    <div class="nav-label section-label">EXPLORE BY TOPIC</div>
+    <nav aria-label="Topics">{% for topic in topics %}<a class="nav-item topic-item" href="{{ '/' | relative_url }}?topic={{ topic | url_encode }}"><span class="topic-dot dot-{{ forloop.index0 | modulo: 4 }}"></span><span>{{ topic | escape }}</span></a>{% endfor %}</nav>
+    <div class="nav-label section-label">RECENT ENTRIES <span>↗</span></div>
+    <nav class="recent" aria-label="Recent entries">{% for post in site.posts limit: 8 %}<a class="{% if page.url == post.url %}chosen{% endif %}" href="{{ post.url | relative_url }}"><span>{{ post.title | escape }}</span><small>{{ post.date | date: '%d %b %Y' }}</small></a>{% endfor %}</nav>
+    <div class="sidebar-bottom"><span class="status-dot"></span>Always a little curious.<div>Made of thoughts & small discoveries.</div><a href="https://github.com/urobor/kubalog">Source on GitHub ↗</a></div>
+  </aside>
+  <button id="menu-scrim" class="scrim" aria-label="Close navigation" hidden></button>
+  <main id="main" class="main">
+    <div class="topbar"><span>THE PERSONAL LOG OF {{ site.author | upcase | escape }}</span><span class="tiny-status"><i></i>Open notebook, open mind</span></div>
+    {{ content }}
+    <footer><span>© {{ 'now' | date: '%Y' }} {{ site.author | escape }} · Fieldnotes</span><span>A notebook, not a highlight reel. <span class="footer-spark">✳</span></span></footer>
+  </main>
+</div>
+</body>
+</html>

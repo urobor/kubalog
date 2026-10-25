@@ -1,49 +1,99 @@
 # Kuba — Fieldnotes
 
-A personal log with a left-hand entry menu, a summary feed, search, topic filters, and an author editor.
+A small static blog for GitHub Pages. Posts are Markdown files in Git.
+No application server, database, Node.js, React, or API keys are required.
+GitHub Pages builds the site with its built-in Jekyll support.
 
-## Stack
+## Enable GitHub Pages (one time)
 
-React and TypeScript, Vinext, a Cloudflare Worker, Cloudflare D1, and ChatGPT authentication provided by Sites.
+1. Open this repository's **Settings → Pages**.
+2. Under **Build and deployment → Source**, choose **Deploy from a branch**.
+3. Choose **main**, **/(root)**, then **Save**.
+4. GitHub will display the published URL when the build finishes.
 
-## Local development
+The configured address is `https://urobor.github.io/kubalog/`.
+This is a project site; `_config.yml` sets `baseurl: /kubalog` so assets and links
+work under that path.
 
-Requires Node.js >=22.13 and pnpm (the project was originally installed with pnpm 11.25).
+GitHub Free requires a public repository for Pages. Private repositories need
+an eligible paid GitHub plan. A Pages website is normally public even when its
+source repository is private. Do not change repository visibility without
+reviewing the full Git history for private material.
 
-```sh
-pnpm install --frozen-lockfile
-pnpm run build
-node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_sudden_silk_fever.sql
-pnpm run dev
+## Write a post directly on GitHub
+
+1. Open `_posts/`, then **Add file → Create new file**.
+2. Name it `YYYY-MM-DD-short-title.md`, for example `2026-10-26-learning-go.md`.
+3. Paste this template and replace the title, topic, summary, date, and body:
+
+```markdown
+---
+title: "Learning Go"
+date: 2026-10-26 12:00:00 +0100
+topic: "Learning"
+summary: "A short introduction that appears in the feed."
+---
+
+Write your entry here. Leave a blank line between paragraphs.
+
+## A heading
+
+- A useful observation
+- Something to try next
+
+Use **bold**, *italic*, links, images, and code blocks as needed.
 ```
 
-Open the local URL printed by the dev command. A clean checkout uses the portable development profile with a separate local database and a development-only mock sign-in at `/signin-with-chatgpt?return_to=/`. Sign in locally, then select **Set up my log**.
+4. Choose **Commit changes** and commit to `main`.
+5. GitHub rebuilds the site automatically once Pages is enabled.
 
-The included [starter reference](docs/sites-starter.md) describes the framework and deployment integration.
+The title is required. A topic and summary make the feed easier to browse.
+Use the timezone offset appropriate for the date: Poland is +0100 in winter
+and +0200 in summer. Future-dated posts are omitted until a later build after
+their publication date; GitHub Pages does not schedule that rebuild for you.
 
-## Source and data
+Edit or delete the corresponding Markdown file to change or remove a post.
+There is no author login or editor inside the published website; GitHub's
+editor provides the writing interface and Git tracks every saved revision.
 
-- `app/journal.tsx`: reading interface and entry editor.
-- `app/globals.css`: styles and responsive layout.
-- `app/api/entries/route.ts`: entry reads/writes and author authorization.
-- `db/schema.ts` and `drizzle/`: database schema and migrations.
-- Posts and drafts live in the hosted D1 database. They are **not** stored in Git and are not included here.
-- Secrets, local databases, dependencies, and build output are excluded.
+## Drafts
 
-## Deployment
+Keep unpublished work in `_drafts/`. Jekyll excludes drafts from the published
+website. Move a finished draft into `_posts/` with a dated filename to publish.
+**Drafts in a public repository are visible in the source**, even though they
+are excluded from the website. For private notes, keep them outside the repo.
 
-The existing website is hosted through ChatGPT Sites. `.openai/hosting.json` identifies that Site. Pushing to this GitHub repository does not automatically deploy the website; an authorized Sites publication is still required.
+## Customize
 
-Deploying independently requires configuring your own Cloudflare Worker, D1 database, and authentication. Initialize author ownership under restricted access before making an independent copy public.
+- `_config.yml`: author, description, domain, and project path.
+- `index.html`: intro and summary feed.
+- `_layouts/`: shared page and article layouts.
+- `assets/style.css`: appearance.
+- `assets/journal.js`: optional search, topic filters, and mobile menu.
+- `assets/`: place images here, then link using `/kubalog/assets/filename.jpg`.
 
-## Original history
+Posts and navigation render as ordinary HTML and remain readable without
+JavaScript. The search and topic filters run in the visitor's browser.
 
-The first Sites version was commit `5680fc21bfaaa3268a91480670c35babdac4742a`. Its complete original Git history is retained in [history/fieldnotes-original.bundle](history/fieldnotes-original.bundle).
+## Optional local preview
 
-To restore that original history separately:
+No local tools are needed to publish through GitHub. If you want a local preview,
+install Ruby and Bundler, then run:
 
 ```sh
-git clone history/fieldnotes-original.bundle fieldnotes-original
+bundle install
+bundle exec jekyll serve --baseurl /kubalog
 ```
 
-The working source is imported directly into this repository for ordinary commits and pull requests going forward.
+Open `http://127.0.0.1:4000/kubalog/`.
+
+## Migration and history
+
+The two published entries were copied from the original Sites database on
+25 October 2026. The original private Sites deployment was left intact during
+the migration. Once Pages is live and verified, it can be retired separately.
+
+The former full-stack code remains in earlier Git commits. The original Sites
+Git history is also preserved in `history/fieldnotes-original.bundle`, which
+is excluded from the published website. The current code needs no Sites or
+Cloudflare integration.

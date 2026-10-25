@@ -1,0 +1,28 @@
+title: "Fieldnotes"
+author: "Kuba"
+description: "Things learned, built, and noticed. A personal log by Kuba."
+url: "https://urobor.github.io"
+baseurl: "/kubalog"
+timezone: Europe/Warsaw
+markdown: kramdown
+permalink: /:year/:month/:day/:title/
+future: false
+show_drafts: false
+strict_front_matter: true
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - docs
+  - history
+  - vendor
+  - .bundle
+  - node_modules
+  - tests
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      topic: Notes
